@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip crashSound;
     private AudioSource playerAudio;
     public bool dirtParticles = true;
+    public int playerScore = 0;
 
 
     // Start is called before the first frame update
@@ -68,12 +70,16 @@ public class PlayerController : MonoBehaviour
             explosionParticle.Play();
             playerAudio.PlayOneShot(crashSound, 1.0f);
             dirtParticles = false;
+            SceneManager.LoadScene(2);
         }
 
+        /*
         if (collision.gameObject.CompareTag("PowerUp"))
         {
+            playerScore = playerScore + 5;
             //Give player additional points
         }
-
+        */
     }
+
 }
