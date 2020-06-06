@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,7 +19,9 @@ public class PlayerController : MonoBehaviour
     public AudioClip crashSound;
     private AudioSource playerAudio;
     public bool dirtParticles = true;
-    public int playerScore = 0;
+    public int ballCount = 0;
+    public bool hasPowerUp;
+    public TextMeshProUGUI scoreText;
 
 
     // Start is called before the first frame update
@@ -27,6 +31,8 @@ public class PlayerController : MonoBehaviour
         playerAnim = GetComponent<Animator>();
         Physics.gravity *= gravityModifier;
         playerAudio = GetComponent<AudioSource>();
+        hasPowerUp = false;
+        UpdateScore(0);
     }
 
     // Update is called once per frame
@@ -50,11 +56,20 @@ public class PlayerController : MonoBehaviour
             playerAnim.SetInteger("DeathType_int", 1);
             dirtParticle.Stop();
             dirtParticles = false;
+            SceneManager.LoadScene(2);
         }
+
+        UpdateScore(1);
+
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if(collision.gameObject.CompareTag("Ball"))
+        {
+            Destroy(collision.gameObject);
+        }
+
         if (collision.gameObject.CompareTag("Ground") && dirtParticles)
         {
             isOnGround = true;
@@ -72,14 +87,24 @@ public class PlayerController : MonoBehaviour
             dirtParticles = false;
             SceneManager.LoadScene(2);
         }
-
-        /*
-        if (collision.gameObject.CompareTag("PowerUp"))
-        {
-            playerScore = playerScore + 5;
-            //Give player additional points
-        }
-        */
     }
 
+
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Ball"))
+        {
+            Destroy(other.gameObject);
+            hasPowerUp = true;
+            UpdateScore(5);
+        }
+    }
+ 
+    private void UpdateScore(int pointsToAdd)
+    {
+        ballCount += pointsToAdd;
+        scoreText.text = "Score: " + ballCount;
+    }
 }

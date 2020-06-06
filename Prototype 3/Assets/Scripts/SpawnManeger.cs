@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class SpawnManeger : MonoBehaviour
 {
+    public GameObject ballPrefab;
     public GameObject obstaclePrefab;
-    public GameObject powerUpPrefab;
     private Vector3 spawnPos = new Vector3(25, 0, 0);
-    //private Vector3 powerUpPos = new Vector3(Random.Range(10, 40), Random.Range(2, 9), 0);
     private float startDelay = 2;
     private float repeatRate = 2;
     private PlayerController playerControllerScript;
@@ -16,32 +15,41 @@ public class SpawnManeger : MonoBehaviour
     void Start()
     {
         InvokeRepeating("SpawnObstacle", startDelay, repeatRate);
+        InvokeRepeating("SpawnBallWave", startDelay, repeatRate);
         playerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
+        SpawnBallWave();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void SpawnObstacle()
     {
-        if(playerControllerScript.gameOver == false)
+        if (playerControllerScript.gameOver == false)
         {
             Instantiate(obstaclePrefab, spawnPos, obstaclePrefab.transform.rotation);
         }
-        
+
     }
-    /*
-    void SpawnPowerUp()
+
+    private Vector3 GenerateSpawnPosition()
+    {
+        float spawnPosX = Random.Range(10, 40);
+        float spawnPosY = Random.Range(2, 9);
+        Vector3 randomPosition = new Vector3(spawnPosX, spawnPosY, 1);
+        return randomPosition;
+    }
+
+    void SpawnBallWave()
     {
         if(playerControllerScript.gameOver == false)
         {
-            Instantiate(powerUpPrefab, powerUpPos, powerUpPrefab.transform.rotation);
+            Instantiate(ballPrefab, GenerateSpawnPosition(), ballPrefab.transform.rotation);
         }
-
     }
-    */
+
 }
 

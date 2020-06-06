@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MoveLeft : MonoBehaviour
 {
-    private float speed = 15;
+    private float speed = 12;
     private PlayerController playerControllerScript;
     private float leftBound = -15;
 
@@ -26,6 +26,10 @@ public class MoveLeft : MonoBehaviour
         {
             Destroy(gameObject);
         }
-         
+
+        if(transform.position.x < leftBound && gameObject.CompareTag("Ball"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
